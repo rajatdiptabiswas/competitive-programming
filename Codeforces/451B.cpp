@@ -54,40 +54,40 @@ int main(int argc, char const *argv[]) {
     }
 
     // 0-indexed
-    int start = -1, end = -1;
-    bool moreThanOneSegment = false;
+    int start = 0, end = 0;
 
-    // find non-increasing order range
+    // find start index
     REP(i, n - 1) {
-        if (a[i] >= a[i + 1]) {
-            if (start == -1) {
-                start = i;
-            }
-            if (i - end > 1) {
-                moreThanOneSegment = true;
-                break;
-            }
-            end = i + 1;
+        if (a[i] > a[i + 1]) {
+            start = i;
+            break;
         }
     }
 
-    // sorted
-    if (start == -1 && end == -1) {
-        cout << "yes" << endl;
-        cout << 1 << " " << 1 << endl; 
+    // find end index
+    RREP(i, n - 2) {
+        if (a[i] > a[i + 1]) {
+            end = i + 1;
+            break;
+        }
     }
-    // greater than one segment to sort
-    else if (moreThanOneSegment) {
-        cout << "no" << endl;
+
+    // reverse [start, end]
+    reverse(a.begin() + start, a.begin() + end + 1);
+
+    // check if sorted
+    bool isSorted = true;
+    REP(i, n - 1) {
+        if (a[i] > a[i + 1]) {
+            isSorted = false;
+            break;
+        }
     }
-    // can sort by reversing [start, end]
-    else if ((end == n - 1 || a[start] <= a[end + 1]) &&
-        (start == 0 || a[end] >= a[start - 1])) {
+
+    if (isSorted) {
         cout << "yes" << endl;
         cout << start + 1 << " " << end + 1 << endl;
-    } 
-    // cannot be sorted
-    else {
+    } else {
         cout << "no" << endl;
     }
 
